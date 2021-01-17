@@ -1,0 +1,40 @@
+services:
+  axon-server:
+    image: axoniq/axonserver:latest
+    container_name: axon-server
+    ports: 
+      - 8024:8024
+      - 8124:8124
+
+  mongoDb:
+    image: mongo:latest
+    container_name: mongo-container_name
+    volumes: 
+      - ./.docker/mongodb_data_container:/data/db
+    ports: 
+      - 27017:27017
+
+  mySqlDb:
+    image: mysql:latest
+    container_name: mysql-container
+    volumes: 
+      - ./.docker/mysql_data_container:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: springbankRootPsw
+    ports:
+      - 3306:3306
+
+  # rabbitmq:
+  #   image: rabbitmq:3-management-alpine
+  #   container_name: rabbitmq
+  #   volumes: 
+  #     - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+  #     - ./.docker/rabbitmq/logs/:/log/rabbitmq/
+  #     - ./.docker/rabbitmq/data/:/lib/rabbitmq/
+  #   environment: 
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest
+  #   ports: 
+  #     - 5672:5672
+  #     - 15672:15672
+  #   net: springbankNet
