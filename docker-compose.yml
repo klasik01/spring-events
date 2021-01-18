@@ -5,6 +5,13 @@ services:
     ports: 
       - 8024:8024
       - 8124:8124
+      - 8224:8224
+    networks:
+      - springbankNet
+    volumes:
+      - axonserver-data:/data
+      - axonserver-events:/eventdata
+      - axonserver-config:/config:ro
 
   mongoDb:
     image: mongo:latest
@@ -13,16 +20,42 @@ services:
       - ./.docker/mongodb_data_container:/data/db
     ports: 
       - 27017:27017
+    networks:
+      - springbankNet
 
-  mySqlDb:
-    image: mysql:latest
-    container_name: mysql-container
-    volumes: 
-      - ./.docker/mysql_data_container:/var/lib/mysql
-    environment: 
-      MYSQL_ROOT_PASSWORD: springbankRootPsw
-    ports:
-      - 3306:3306
+#  mySqlDb:
+#    image: mysql:latest
+#    container_name: mysql-container
+#    volumes:
+#      - ./.docker/mysql_data_container:/var/lib/mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD: springbankRootPsw
+#    ports:
+#      - 3306:3306
+#    networks:
+#      - springbankNet
+
+volumes:
+  axonserver-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.docker/axon/data
+      o: bind
+  axonserver-events:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.docker/axon/events
+      o: bind
+  axonserver-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.docker/axon/config
+      o: bind
+
+
 
   # rabbitmq:
   #   image: rabbitmq:3-management-alpine
@@ -38,3 +71,6 @@ services:
   #     - 5672:5672
   #     - 15672:15672
   #   net: springbankNet
+
+networks:
+  springbankNet:
